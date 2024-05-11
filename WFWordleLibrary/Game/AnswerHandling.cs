@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using WFWordleLibrary.Model;
@@ -10,6 +11,7 @@ namespace WFWordleLibrary.Game
 {
     public class AnswerHandling
     {
+        static WarframeWordleContext context = new();
         public static WarframeGuessAnswer GetWarframeAnswer(Warframe selected, Warframe guess)
         {
             WarframeGuessAnswer answer = new()
@@ -26,7 +28,8 @@ namespace WFWordleLibrary.Game
                 ShieldsGuessed = HighLowCompare<int>(selected.Shields, guess.Shields),
                 ArmorGuessed = HighLowCompare<int>(selected.Armor, guess.Armor),
                 EnergyGuessed = HighLowCompare<int>(selected.Energy, guess.Energy),
-               SprintGuessed = HighLowCompare<decimal>(selected.SprintSpeed, guess.SprintSpeed)
+                SprintGuessed = HighLowCompare<decimal>(selected.SprintSpeed, guess.SprintSpeed),
+                AcquisitionGuessed = SoftCompare<int>(context.WarframeAcquisitions.Where(x => x.Warframe == selected.Id).Select(x=>x.AcquisitionMethod).ToList(), context.WarframeAcquisitions.Where(x => x.Warframe == guess.Id).Select(x => x.AcquisitionMethod).ToList())
             };
             return answer;
         }
@@ -43,7 +46,7 @@ namespace WFWordleLibrary.Game
 
         static AnswerTypes SoftCompare<T>(List<T> selected, List<T> guess)
         {
-            if (selected.Intersect(guess).Count() == selected.Count)
+            if (selected.Intersect(guess).Count() == selected.Count && selected.Count == guess.Count)
             {
                 return AnswerTypes.Correct;
             }

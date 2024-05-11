@@ -49,9 +49,9 @@ public partial class Warframe
 
     public virtual GameUpdate ReleasedInUpdateNavigation { get; set; } = null!;
 
-    public virtual ICollection<WarframeGuess> WarframeGuesses { get; set; } = new List<WarframeGuess>();
+    public virtual ICollection<WarframeAcquisition> WarframeAcquisitions { get; set; } = new List<WarframeAcquisition>();
 
-    public virtual ICollection<AcquisitionMethod> AcquisitionMethods { get; set; } = new List<AcquisitionMethod>();
+    public virtual ICollection<WarframeGuess> WarframeGuesses { get; set; } = new List<WarframeGuess>();
 
     public virtual ICollection<Playstyle> CommonPlaystyles { get; set; } = new List<Playstyle>();
 }

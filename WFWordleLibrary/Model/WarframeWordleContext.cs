@@ -36,6 +36,8 @@ public partial class WarframeWordleContext : DbContext
 
     public virtual DbSet<Warframe> Warframes { get; set; }
 
+    public virtual DbSet<WarframeAcquisition> WarframeAcquisitions { get; set; }
+
     public virtual DbSet<WarframeGame> WarframeGames { get; set; }
 
     public virtual DbSet<WarframeGuess> WarframeGuesses { get; set; }
@@ -196,23 +198,6 @@ public partial class WarframeWordleContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Warframe__Releas__5070F446");
 
-            entity.HasMany(d => d.AcquisitionMethods).WithMany(p => p.Warframes)
-                .UsingEntity<Dictionary<string, object>>(
-                    "WarframeAcquisition",
-                    r => r.HasOne<AcquisitionMethod>().WithMany()
-                        .HasForeignKey("AcquisitionMethod")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__WarframeA__Acqui__5629CD9C"),
-                    l => l.HasOne<Warframe>().WithMany()
-                        .HasForeignKey("Warframe")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__WarframeA__Warfr__5535A963"),
-                    j =>
-                    {
-                        j.HasKey("Warframe", "AcquisitionMethod").HasName("PK__Warframe__641891C697D5DC11");
-                        j.ToTable("WarframeAcquisition");
-                    });
-
             entity.HasMany(d => d.CommonPlaystyles).WithMany(p => p.Warframes)
                 .UsingEntity<Dictionary<string, object>>(
                     "WarframePlaystyle",
@@ -229,6 +214,25 @@ public partial class WarframeWordleContext : DbContext
                         j.HasKey("Warframe", "CommonPlaystyle").HasName("PK__Warframe__A3A71DF875F2499F");
                         j.ToTable("WarframePlaystyle");
                     });
+        });
+
+        modelBuilder.Entity<WarframeAcquisition>(entity =>
+        {
+            entity.HasKey(e => new { e.Warframe, e.AcquisitionMethod }).HasName("PK__Warframe__641891C697D5DC11");
+
+            entity.ToTable("WarframeAcquisition");
+
+            entity.Property(e => e.AdditionalInfo).HasMaxLength(50);
+
+            entity.HasOne(d => d.AcquisitionMethodNavigation).WithMany(p => p.WarframeAcquisitions)
+                .HasForeignKey(d => d.AcquisitionMethod)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__WarframeA__Acqui__5629CD9C");
+
+            entity.HasOne(d => d.WarframeNavigation).WithMany(p => p.WarframeAcquisitions)
+                .HasForeignKey(d => d.Warframe)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__WarframeA__Warfr__5535A963");
         });
 
         modelBuilder.Entity<WarframeGame>(entity =>

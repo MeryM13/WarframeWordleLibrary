@@ -24,7 +24,7 @@ using (var context = new WarframeWordleContext())
     Random rand = new Random();
     int tries = 0;
     int warframeCount = context.Warframes.Count();
-    Warframe selected = context.Warframes.ElementAt(rand.Next(warframeCount));
+    Warframe selected = context.Warframes.ElementAt(rand.Next(30));
     Warframe guess = new();
     do
     {

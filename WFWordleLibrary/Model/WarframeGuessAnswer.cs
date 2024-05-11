@@ -21,5 +21,6 @@ namespace WFWordleLibrary.Model
         public AnswerTypes ArmorGuessed { get; set; } = AnswerTypes.Higher;
         public AnswerTypes EnergyGuessed { get; set; } = AnswerTypes.Higher;
         public AnswerTypes SprintGuessed { get; set; } = AnswerTypes.Higher;
+        public AnswerTypes AcquisitionGuessed { get; set; } = AnswerTypes.Wrong;
     }
 }

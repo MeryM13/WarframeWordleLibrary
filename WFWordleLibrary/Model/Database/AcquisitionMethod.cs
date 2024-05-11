@@ -9,7 +9,7 @@ public partial class AcquisitionMethod
 
     public string MethodName { get; set; } = null!;
 
-    public virtual ICollection<Warframe> Warframes { get; set; } = new List<Warframe>();
+    public virtual ICollection<WarframeAcquisition> WarframeAcquisitions { get; set; } = new List<WarframeAcquisition>();
 
     public virtual ICollection<Weapon> Weapons { get; set; } = new List<Weapon>();
 }
